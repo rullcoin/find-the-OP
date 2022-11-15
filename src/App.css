@@ -2,3 +2,12 @@
   width: 100%;
   height: auto;
 }
+
+.square {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  border: 6px red solid;
+  width: 10%;
+  height: 10%;
+}

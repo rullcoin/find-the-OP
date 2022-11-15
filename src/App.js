@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import React from 'react'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -42,15 +42,24 @@ function App() {
     console.log(data);
   }, [])
 
+  const imgRef = useRef();
+
   const onImgClick = (e) => {
-    console.log(e.pageX + "X coordinates");
-    console.log(e.pageY + "Y coordinates");
+
+    // console.log(e.pageX + "X coordinates");
+    // console.log(e.pageY + "Y coordinates");
+    // console.log(e.target.pageX);
+    const coordX = Math.round((e.nativeEvent.offsetX / e.nativeEvent.target.offsetWidth) * 100)
+    const coordY = Math.round((e.nativeEvent.offsetY / e.nativeEvent.target.offsetWidth) * 100)
+
+    console.log(coordX + " " + coordY);
   }
   
   return (
     <div className="App">
       <h1>Hies</h1>
-      <img className='op-image' src={require('.//op.jpeg')} alt="One piece" onClick={onImgClick}></img>
+      <img className='op-image' id="op-image" src={require('.//op.jpeg')} alt="One piece" onClick={onImgClick}></img>
+      <div className='square'></div>
     </div>
   );
 }
