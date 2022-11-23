@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import db from "./components/firebaseDatabase";
 import verifyClickDegree from "./components/verifyClickDegree";
-
+import CharDropdown from "./components/charDropdown";
 const {
   getFirestore,
   Timestamp,
@@ -14,6 +14,8 @@ const {
 
 function App() {
   const [data, setData] = useState([]);
+  const [clickLocation, setClickLocation] = useState({left: "0%" , top : "0%"});
+  const [coords, setCoords] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -34,8 +36,15 @@ function App() {
       (e.nativeEvent.offsetX / e.nativeEvent.target.offsetWidth) * 100
     );
     const coordY = Math.round(
-      (e.nativeEvent.offsetY / e.nativeEvent.target.offsetWidth) * 100
+      //(e.nativeEvent.offsetY / e.nativeEvent.target.offsetHeight) * 100
+      (e.nativeEvent.offsetY / document.documentElement.offsetHeight) * 100
     );
+
+    console.log(coordX + " " + coordY);
+
+
+    const clickedCoords = {left: coordX + "%", top: coordY + "%"}
+    setClickLocation(clickedCoords)
 
 
     fetchData();
@@ -56,13 +65,24 @@ function App() {
     return isFound;
   };
 
-  const divDropDown = () => {
-    console.log("Div was clicked");
+  const updateClickLocation = () => {
+    const { xCoord, yCoord } = coords;
+
+    const updatedCoords = { left: xCoord + "%", top: yCoord + "%" };
+    setClickLocation(updatedCoords);
+
+    //setShowDropdown(true);
+  };
+
+  const divDropDown = (e) => {
+    let selectedDiv = document.getElementById('myDropdown')
+    selectedDiv.classList.toggle("show")
+
+    console.log(e.target.textContent);
   }
 
   return (
     <div className="App" onClick={divDropDown}>
-      <h1>Hies</h1>
       <img
         className="op-image"
         id="op-image"
@@ -70,7 +90,7 @@ function App() {
         alt="One piece"
         onClick={onImgClick}
       ></img>
-      <div className="square"></div>
+      <CharDropdown position={clickLocation}/>
     </div>
   );
 }
