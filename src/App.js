@@ -14,12 +14,15 @@ const {
 
 function App() {
   const [data, setData] = useState([]);
-  const [clickLocation, setClickLocation] = useState({left: "0%" , top : "0%"});
+  const [clickLocation, setClickLocation] = useState({ left: "0%", top: "0%" });
   const [coords, setCoords] = useState(null);
+  const [userPick, setUserPick] = useState(null);
+  const [charFoundOnClick, setCharFoundOnClick] = useState();
 
   useEffect(() => {
     fetchData();
-  }, []);
+    verifyPick(userPick, charFoundOnClick);
+  }, [userPick]);
 
   const fetchData = async () => {
     await getDocs(collection(db, "char-data")).then((snapshot) => {
@@ -35,54 +38,57 @@ function App() {
     const coordX = Math.round(
       (e.nativeEvent.offsetX / e.nativeEvent.target.offsetWidth) * 100
     );
+    // Y coordinate used to position dropdown menu correctly
     const coordY = Math.round(
-      //(e.nativeEvent.offsetY / e.nativeEvent.target.offsetHeight) * 100
       (e.nativeEvent.offsetY / document.documentElement.offsetHeight) * 100
     );
+    // Y coordinate to verify click location
+    const nativeCoordY = Math.round(
+      (e.nativeEvent.offsetY / e.nativeEvent.target.offsetHeight) * 100
+    );
 
-    console.log(coordX + " " + coordY);
-
-
-    const clickedCoords = {left: coordX + "%", top: coordY + "%"}
-    setClickLocation(clickedCoords)
-
-
-    fetchData();
-
-    verifyClick(coordX, coordY);
+    const clickedCoords = { left: coordX + "%", top: coordY + "%" };
+    setClickLocation(clickedCoords);
+    verifyClick(coordX, nativeCoordY);
   };
 
   const verifyClick = (userX, userY) => {
-    let charFound = ""
-
-    let isFound = data.find((o) => {
+    data.find((o) => {
       if (
-        verifyClickDegree(userX, o.coordX) && verifyClickDegree(userY, o.coordY)
+        verifyClickDegree(userX, o.coordX) &&
+        verifyClickDegree(userY, o.coordY)
       ) {
-        console.log("Char found" + " " +  o.name);
+        setCharFoundOnClick(o.name);
       }
     });
-    return isFound;
   };
 
-  const updateClickLocation = () => {
-    const { xCoord, yCoord } = coords;
-
-    const updatedCoords = { left: xCoord + "%", top: yCoord + "%" };
-    setClickLocation(updatedCoords);
-
-    //setShowDropdown(true);
+  const verifyPick = (char1, char2) => {
+    if (char1 === char2) {
+      console.log("Correct!");
+      // Reset state pick
+      setCharFoundOnClick(null)
+    }
   };
 
-  const divDropDown = (e) => {
-    let selectedDiv = document.getElementById('myDropdown')
-    selectedDiv.classList.toggle("show")
+  const divDropDownSelection = (e) => {
+    let selectedDiv = document.getElementById("myDropdown");
+    selectedDiv.classList.toggle("show");
 
+    let selectedCharacter = e.target.textContent;
+
+
+    setUserPick(selectedCharacter);
+  };
+
+  const getClickValue = (e) => {
+    console.log(e.target.value);
     console.log(e.target.textContent);
+
   }
 
   return (
-    <div className="App" onClick={divDropDown}>
+    <div className="App" onClick={divDropDownSelection}>
       <img
         className="op-image"
         id="op-image"
@@ -90,7 +96,7 @@ function App() {
         alt="One piece"
         onClick={onImgClick}
       ></img>
-      <CharDropdown position={clickLocation}/>
+      <CharDropdown position={clickLocation} onClickValue={getClickValue}/>
     </div>
   );
 }
