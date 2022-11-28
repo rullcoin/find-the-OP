@@ -4,6 +4,7 @@ import React from "react";
 import db from "./components/firebaseDatabase";
 import verifyClickDegree from "./components/verifyClickDegree";
 import CharDropdown from "./components/charDropdown";
+import Header from "./components/header.js";
 const {
   getFirestore,
   Timestamp,
@@ -51,29 +52,29 @@ function App() {
     console.log(clickedCoords);
 
     setClickLocation(clickedCoords);
+    // Reset char found on click state if user does not choose an option from the dropdown.
     setCharFoundOnClick(null);
     verifyClick(coordX, nativeCoordY);
   };
 
   const verifyClick = (userX, userY) => {
-    console.log("Verify click now");
     data.find((o) => {
       if (
         verifyClickDegree(userX, o.coordX) &&
         verifyClickDegree(userY, o.coordY)
       ) {
         setCharFoundOnClick(o.name);
-      } 
+      }
     });
   };
 
-  const verifyPick = (char1, char2) => {
-    console.log("Verify PICK now");
-
+  const verifyPick = (char1, char2, e) => {
     if (char1 === char2) {
+      // Win logic here
+      document.getElementById(`${char1}`).style.opacity = 0.2
       console.log("Correct!");
       // Reset state pick
-      setCharFoundOnClick(null)
+      setCharFoundOnClick(null);
     }
   };
 
@@ -84,33 +85,34 @@ function App() {
     let selectedCharacter = e.target.textContent;
 
     // Get attribute for char selection if user clicks on image instead of name.
-    let selectedCharacterImage = e.target.alt
-
+    let selectedCharacterImage = e.target.alt;
 
     if (selectedCharacter) {
       setUserPick(selectedCharacter);
     } else {
-      setUserPick(selectedCharacterImage)
+      setUserPick(selectedCharacterImage);
     }
-    
   };
 
   const getClickValue = (e) => {
     console.log(e.target.value);
     console.log(e.target.textContent);
-
-  }
+  };
 
   return (
-    <div className="App" onClick={divDropDownSelection}>
-      <img
-        className="op-image"
-        id="op-image"
-        src={require(".//op.jpeg")}
-        alt="One piece"
-        onClick={onImgClick}
-      ></img>
-      <CharDropdown position={clickLocation} onClickValue={getClickValue}/>
+    <div>
+      <Header />
+
+      <div className="App" onClick={divDropDownSelection}>
+        <img
+          className="op-image"
+          id="op-image"
+          src={require(".//op.jpeg")}
+          alt="One piece"
+          onClick={onImgClick}
+        ></img>
+        <CharDropdown position={clickLocation} onClickValue={getClickValue} />
+      </div>
     </div>
   );
 }

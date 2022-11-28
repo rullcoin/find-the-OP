@@ -11,9 +11,25 @@ overflow-x: hidden;
   display: flex;
 }
 
+.header {
+  height: 100px;
+  background-color: rgb(204, 222, 222);
+  border-bottom: 3px solid rgb(96, 38, 38);
+  position: fixed;
+  width: 100%;
+}
+
 .icons {
   width: 33px;
   height: 33px;
+  margin-left: 5px;
+  padding-top: 5px;
+  border-radius: 25px;
+}
+
+.icons-header {
+  width: 75px;
+  height: 75px;
   margin-left: 5px;
   padding-top: 5px;
   border-radius: 25px;
