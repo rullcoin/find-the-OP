@@ -33,6 +33,7 @@ overflow-x: hidden;
   display: block;
   position:absolute;
   overflow: auto;
+  cursor: pointer;
 }
 
 .dropdown-content {

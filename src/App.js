@@ -48,22 +48,28 @@ function App() {
     );
 
     const clickedCoords = { left: coordX + "%", top: coordY + "%" };
+    console.log(clickedCoords);
+
     setClickLocation(clickedCoords);
+    setCharFoundOnClick(null);
     verifyClick(coordX, nativeCoordY);
   };
 
   const verifyClick = (userX, userY) => {
+    console.log("Verify click now");
     data.find((o) => {
       if (
         verifyClickDegree(userX, o.coordX) &&
         verifyClickDegree(userY, o.coordY)
       ) {
         setCharFoundOnClick(o.name);
-      }
+      } 
     });
   };
 
   const verifyPick = (char1, char2) => {
+    console.log("Verify PICK now");
+
     if (char1 === char2) {
       console.log("Correct!");
       // Reset state pick
