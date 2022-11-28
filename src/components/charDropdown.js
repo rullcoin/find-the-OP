@@ -8,17 +8,17 @@ const CharDropdown = (props) => {
     <div className="dropdown" style={props.position}>
       <div id="myDropdown" class="dropdown-content">
         <div className="flex selection-content">
-          <img className="icons" src={boaImage} value="boa"></img>
+        <img className="icons" src={boaImage} id="char-one" alt="Boa"></img>
           <a href="#">
             Boa
           </a>
         </div>
-        <div className="flex selection-content" value="Whitebeard">
-          <img className="icons" src={whiteBeardImage}></img>
+        <div className="flex selection-content" id="char-two" >
+          <img className="icons" src={whiteBeardImage} alt="Whitebeard"></img>
           <a href="#">Whitebeard</a>
         </div>
-        <div className="flex selection-content" value="Pandaman">
-          <img className="icons" src={pandamanImage}></img>
+        <div className="flex selection-content" id="char-three" >
+          <img className="icons" src={pandamanImage} alt="Pandaman"></img>
           <a href="#">Pandaman</a>
         </div>
       </div>

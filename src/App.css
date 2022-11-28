@@ -53,7 +53,8 @@ overflow-x: hidden;
 .selection-content {
   border-bottom: 1px solid rgb(101, 98, 98);
 }
-.dd {
+
+.gap {
   gap: 20px;
 }
 

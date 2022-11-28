@@ -77,8 +77,16 @@ function App() {
 
     let selectedCharacter = e.target.textContent;
 
+    // Get attribute for char selection if user clicks on image instead of name.
+    let selectedCharacterImage = e.target.alt
 
-    setUserPick(selectedCharacter);
+
+    if (selectedCharacter) {
+      setUserPick(selectedCharacter);
+    } else {
+      setUserPick(selectedCharacterImage)
+    }
+    
   };
 
   const getClickValue = (e) => {
