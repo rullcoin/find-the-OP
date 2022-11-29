@@ -5,6 +5,7 @@ import db from "./components/firebaseDatabase";
 import verifyClickDegree from "./components/verifyClickDegree";
 import CharDropdown from "./components/charDropdown";
 import Header from "./components/header.js";
+import GameOverModal from "./components/GameOverModal";
 const {
   getFirestore,
   Timestamp,
@@ -19,11 +20,14 @@ function App() {
   const [coords, setCoords] = useState(null);
   const [userPick, setUserPick] = useState(null);
   const [charFoundOnClick, setCharFoundOnClick] = useState();
+  const [foundChars, setfoundChars] = useState([]);
+
 
   useEffect(() => {
     fetchData();
     verifyPick(userPick, charFoundOnClick);
-  }, [userPick]);
+    checkGameOver()
+  }, [userPick, foundChars]);
 
   const fetchData = async () => {
     await getDocs(collection(db, "char-data")).then((snapshot) => {
@@ -73,6 +77,13 @@ function App() {
       // Win logic here
       document.getElementById(`${char1}`).style.opacity = 0.2
       console.log("Correct!");
+
+      // Check if character already found. If not store in a state array.
+      if(!foundChars.includes(char1)) {
+        setfoundChars([...foundChars, char1])
+      } 
+      
+
       // Reset state pick
       setCharFoundOnClick(null);
     }
@@ -94,15 +105,21 @@ function App() {
     }
   };
 
-  const getClickValue = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.textContent);
+  const gameOver = () => {
+    let gameOverModal = document.getElementById("gameOverModal")
+    gameOverModal.classList.toggle("show")
   };
+
+  const checkGameOver = () => {
+    if(foundChars.length === 3) {
+      console.log("You WIN!");
+      gameOver()
+    }
+  }
 
   return (
     <div>
       <Header />
-
       <div className="App" onClick={divDropDownSelection}>
         <img
           className="op-image"
@@ -111,7 +128,8 @@ function App() {
           alt="One piece"
           onClick={onImgClick}
         ></img>
-        <CharDropdown position={clickLocation} onClickValue={getClickValue} />
+        <CharDropdown position={clickLocation} />
+        <GameOverModal />
       </div>
     </div>
   );
