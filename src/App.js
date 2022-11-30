@@ -14,13 +14,17 @@ const {
   getDocs,
 } = require("firebase/firestore");
 
+let startTime = Date.now()
+
 function App() {
   const [data, setData] = useState([]);
   const [clickLocation, setClickLocation] = useState({ left: "0%", top: "0%" });
-  const [coords, setCoords] = useState(null);
   const [userPick, setUserPick] = useState(null);
   const [charFoundOnClick, setCharFoundOnClick] = useState();
   const [foundChars, setfoundChars] = useState([]);
+  const [totalTime, setTotalTime] = useState()
+  const [endingTime, setEndingTime] = useState(0)
+
 
 
   useEffect(() => {
@@ -28,6 +32,12 @@ function App() {
     verifyPick(userPick, charFoundOnClick);
     checkGameOver()
   }, [userPick, foundChars]);
+
+  const interval = setInterval(function() {
+      let elapsedTime = new Date() - startTime
+      //console.log(elapsedTime);
+      setTotalTime((elapsedTime / 1000))
+  }, 1000)
 
   const fetchData = async () => {
     await getDocs(collection(db, "char-data")).then((snapshot) => {
@@ -53,7 +63,6 @@ function App() {
     );
 
     const clickedCoords = { left: coordX + "%", top: coordY + "%" };
-    console.log(clickedCoords);
 
     setClickLocation(clickedCoords);
     // Reset char found on click state if user does not choose an option from the dropdown.
@@ -114,6 +123,7 @@ function App() {
     if(foundChars.length === 3) {
       console.log("You WIN!");
       gameOver()
+      setEndingTime(totalTime)
     }
   }
 
@@ -129,7 +139,7 @@ function App() {
           onClick={onImgClick}
         ></img>
         <CharDropdown position={clickLocation} />
-        <GameOverModal />
+        <GameOverModal totalTime={endingTime}/>
       </div>
     </div>
   );
