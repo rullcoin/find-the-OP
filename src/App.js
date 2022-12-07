@@ -46,6 +46,7 @@ function App() {
         id: doc.id,
       }));
       setData(newData);
+      console.log(newData);
     });
   };
 
@@ -116,7 +117,10 @@ function App() {
 
   const gameOver = () => {
     let gameOverModal = document.getElementById("gameOverModal")
-    gameOverModal.classList.toggle("show")
+    let fullScreenModal = document.getElementById("fullscreenContainer")
+
+    gameOverModal.classList.add("show")
+    fullScreenModal.classList.add("show")
   };
 
   const checkGameOver = () => {
@@ -139,8 +143,8 @@ function App() {
           onClick={onImgClick}
         ></img>
         <CharDropdown position={clickLocation} />
-        <GameOverModal totalTime={endingTime}/>
       </div>
+      <GameOverModal totalTime={endingTime}/>
     </div>
   );
 }

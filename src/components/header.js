@@ -2,6 +2,7 @@ import React from 'react';
 import boaImage from "../img/boa.jpeg";
 import whiteBeardImage from "../img/whitebeard.webp";
 import pandamanImage from "../img/pandaman.webp";
+import Leaderboard from './leaderboard';
 
 const Header = () => {
     return (
@@ -14,6 +15,7 @@ const Header = () => {
                 <img className="icons-header" src={pandamanImage} id="Pandaman" alt="Pandaman"></img>
                 <p>Pandaman</p>
             </div>
+            <Leaderboard />
         </div>
     );
 };
