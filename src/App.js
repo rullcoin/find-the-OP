@@ -1,15 +1,13 @@
 import "./App.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import db from "./components/firebaseDatabase";
 import verifyClickDegree from "./components/verifyClickDegree";
 import CharDropdown from "./components/charDropdown";
 import Header from "./components/header.js";
 import GameOverModal from "./components/GameOverModal";
+
 const {
-  getFirestore,
-  Timestamp,
-  FieldValue,
   collection,
   getDocs,
 } = require("firebase/firestore");
@@ -24,7 +22,6 @@ function App() {
   const [foundChars, setfoundChars] = useState([]);
   const [totalTime, setTotalTime] = useState()
   const [endingTime, setEndingTime] = useState(0)
-
 
 
   useEffect(() => {
@@ -46,7 +43,6 @@ function App() {
         id: doc.id,
       }));
       setData(newData);
-      console.log(newData);
     });
   };
 
@@ -132,20 +128,20 @@ function App() {
   }
 
   return (
-    <div>
-      <Header />
-      <div className="App" onClick={divDropDownSelection}>
-        <img
-          className="op-image"
-          id="op-image"
-          src={require(".//op.jpeg")}
-          alt="One piece"
-          onClick={onImgClick}
-        ></img>
-        <CharDropdown position={clickLocation} />
+      <div>
+        <Header />
+        <div className="App" onClick={divDropDownSelection}>
+          <img
+            className="op-image"
+            id="op-image"
+            src={require(".//op.jpeg")}
+            alt="One piece"
+            onClick={onImgClick}
+          ></img>
+          <CharDropdown position={clickLocation} />
+        </div>
+        <GameOverModal totalTime={endingTime}/>
       </div>
-      <GameOverModal totalTime={endingTime}/>
-    </div>
   );
 }
 

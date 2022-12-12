@@ -1,19 +1,29 @@
 import React from 'react';
 import { useState } from "react";
 import db from "./firebaseDatabase";
-const { getFirestore, collection, setDocs, setDoc, doc, addDoc } = require('firebase/firestore');
+import {useNavigate} from 'react-router-dom'
+const { collection, addDoc } = require('firebase/firestore');
 
 
 const GameOverModal = props => {
     const [userName, setUserName] = useState('')
     const [time, setTime] = useState('')
 
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(userName);
+        addData()
 
-    addData()
+        // Removes game over modal and show leaderboard on submission.
+        let gameOverModal = document.getElementById("gameOverModal")
+        let fullScreenModal = document.getElementById("fullscreenContainer")
+        
+        gameOverModal.classList.remove("show")
+        fullScreenModal.classList.remove("show")
+
+        // Redirect user to Leaderboard page on click.
+        navigate('/leaderboard')
     }
 
     const handleChange = (e) => {
@@ -24,8 +34,8 @@ const GameOverModal = props => {
 
 
   const addData = async () => {
-    const docRef = await addDoc(collection(db, "leaderboard"), {
-        userName,
+     await addDoc(collection(db, "leaderboard"), {
+        userName, 
         time
       });
   };
@@ -34,12 +44,22 @@ const GameOverModal = props => {
     return (
         <div className='fullscreen-container' id='fullscreenContainer'>
             <div className='game-over-modal flex center' id='gameOverModal'>
-                <div>
-                    <h1>You win!</h1>
-                    <h1>{props.totalTime} seconds</h1>
-                    <input type="text" id="fname" name="fname" placeholder="Enter your name" onChange={handleChange} value={userName}></input>
-                    <button type='submit' onClick={handleSubmit}>Submit score</button>
+                <div className='flex col center'>
+                    <div className='border-white-bottom flex center'>
+                        <h1>You finished in {props.totalTime} seconds!</h1>
+                    </div>
+                    <div className='flex col'>
+                        <div>
+                        <h3>Add your name to the leaderboard!</h3>
+                        <input className='modal-form' maxLength={30} type="text" id="fname" name="fname" placeholder="Enter your name" onChange={handleChange} value={userName}></input>
+                        </div>
+                        <div className='button-container flex gap'>
+                        <button className='submit-button' type='submit' onClick={handleSubmit}>Submit score</button>
+                        <button className='cancel-button' type='submit'>Cancel</button>
 
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-const { getFirestore, Timestamp, FieldValue, collection, getDocs } = require('firebase/firestore');
+const { getFirestore } = require('firebase/firestore');
 
 const firebaseConfig = {
     apiKey: "AIzaSyCJ6YYFFg_yCFhw5M98BiTtST6LUTagFeg",
